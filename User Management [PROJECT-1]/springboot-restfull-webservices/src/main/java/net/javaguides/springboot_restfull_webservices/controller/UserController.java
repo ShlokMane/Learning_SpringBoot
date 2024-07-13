@@ -1,6 +1,7 @@
 package net.javaguides.springboot_restfull_webservices.controller;
 
 import lombok.AllArgsConstructor;
+import net.javaguides.springboot_restfull_webservices.dto.UserDto;
 import net.javaguides.springboot_restfull_webservices.entity.User;
 import net.javaguides.springboot_restfull_webservices.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,26 +21,26 @@ public class UserController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<User> createUser(@RequestBody  User user) {
-        User savedUser = userService.createUser(user);
-        return new ResponseEntity<User>(savedUser, HttpStatus.CREATED);
+    public ResponseEntity<UserDto> createUser(@RequestBody  UserDto user) {
+        UserDto savedUser = userService.createUser(user);
+        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 
     @GetMapping("/get-user-{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
-        User savedUser = userService.getUserById(id);
-        return new ResponseEntity<User>(savedUser, HttpStatus.OK);
+    public ResponseEntity<UserDto> getUserById(@PathVariable("id") Long id) {
+        UserDto savedUser = userService.getUserById(id);
+        return new ResponseEntity<>(savedUser, HttpStatus.OK);
     }
 
     @GetMapping("/get-all")
-    public ResponseEntity<List<User>>  getAllUsers() {
-        List<User> userList = userService.getAllUsers();
-        return new ResponseEntity<List<User>>(userList, HttpStatus.OK);
+    public ResponseEntity<List<UserDto>>  getAllUsers() {
+        List<UserDto> userList = userService.getAllUsers();
+        return new ResponseEntity<>(userList, HttpStatus.OK);
     }
 
     @PutMapping("/update-user")
-    public ResponseEntity<User> updateUser(@RequestBody User user) {
-        User updatedUser = userService.updateUserDetails(user);
+    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto user) {
+        UserDto updatedUser = userService.updateUserDetails(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
