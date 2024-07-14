@@ -3,6 +3,7 @@ package net.javaguides.springboot_restfull_webservices.service.impl;
 import lombok.AllArgsConstructor;
 import net.javaguides.springboot_restfull_webservices.dto.UserDto;
 import net.javaguides.springboot_restfull_webservices.entity.User;
+import net.javaguides.springboot_restfull_webservices.exception.EmailAlreadyExistsException;
 import net.javaguides.springboot_restfull_webservices.exception.ResourceNotFoundException;
 import net.javaguides.springboot_restfull_webservices.mapper.UserMapper;
 import net.javaguides.springboot_restfull_webservices.respository.UserRepository;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -26,20 +28,27 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto createUser(UserDto userDto) {
 
-//        User user = UserMapper.mapToUser(userDto);
-        User user = modelMapper.map(userDto, User.class);
+//      User user = UserMapper.mapToUser(userDto);
+//      User user = modelMapper.map(userDto, User.class);
 
+        Optional<User> optionalUser = userRepository.findByEmail(userDto.getEmail());
+
+        if (optionalUser.isPresent()) {
+            throw new EmailAlreadyExistsException();
+        }
+
+        User user = modelMapper.map(userDto, User.class);
         User savedUser = userRepository.save(user);
 
-//        UserDto savedUserDto = UserMapper.mapToUserDto(savedUser);
+//      UserDto savedUserDto = UserMapper.mapToUserDto(savedUser);
         UserDto savedUserDto = modelMapper.map(savedUser, UserDto.class);
         return savedUserDto;
     }
 
     @Override
     public UserDto getUserById(Long id) {
-        User user =  userRepository.findById(id).orElseThrow(
-                ()-> new ResourceNotFoundException("User", "id", id)
+        User user = userRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("User", "id", id)
         );
 //        UserDto savedUserDto = UserMapper.mapToUserDto(user);
         UserDto savedUserDto = modelMapper.map(user, UserDto.class);
@@ -48,9 +57,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getAllUsers() {
-        List<User> allUsers =  userRepository.findAll();
+        List<User> allUsers = userRepository.findAll();
         List<UserDto> allUserDto = new ArrayList<>();
-        for(User user : allUsers) {
+        for (User user : allUsers) {
 //            allUserDto.add(UserMapper.mapToUserDto(user));
             allUserDto.add(modelMapper.map(user, UserDto.class));
         }
@@ -60,7 +69,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto updateUserDetails(UserDto userDto) {
         User existingUser = userRepository.findById(userDto.getId()).orElseThrow(
-                ()-> new ResourceNotFoundException("User", "id", userDto.getId())
+                () -> new ResourceNotFoundException("User", "id", userDto.getId())
         );
         existingUser.setFirstName(userDto.getFirstName());
         existingUser.setLastName(userDto.getLastName());
@@ -76,7 +85,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Long id) {
         User user = userRepository.findById(id).orElseThrow(
-                ()-> new ResourceNotFoundException("User", "id", id)
+                () -> new ResourceNotFoundException("User", "id", id)
         );
         userRepository.deleteById(id);
     }
