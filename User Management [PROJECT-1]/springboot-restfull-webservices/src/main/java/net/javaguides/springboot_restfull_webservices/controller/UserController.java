@@ -1,8 +1,8 @@
 package net.javaguides.springboot_restfull_webservices.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import net.javaguides.springboot_restfull_webservices.dto.UserDto;
-import net.javaguides.springboot_restfull_webservices.entity.User;
 import net.javaguides.springboot_restfull_webservices.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,7 +21,7 @@ public class UserController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<UserDto> createUser(@RequestBody  UserDto user) {
+    public ResponseEntity<UserDto> createUser(@RequestBody @Valid UserDto user) {
         UserDto savedUser = userService.createUser(user);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
@@ -39,7 +39,7 @@ public class UserController {
     }
 
     @PutMapping("/update-user")
-    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto user) {
+    public ResponseEntity<UserDto> updateUser(@RequestBody @Valid UserDto user) {
         UserDto updatedUser = userService.updateUserDetails(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
