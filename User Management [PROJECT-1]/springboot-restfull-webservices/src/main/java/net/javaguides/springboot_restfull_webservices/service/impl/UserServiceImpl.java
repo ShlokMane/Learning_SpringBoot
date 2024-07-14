@@ -3,6 +3,7 @@ package net.javaguides.springboot_restfull_webservices.service.impl;
 import lombok.AllArgsConstructor;
 import net.javaguides.springboot_restfull_webservices.dto.UserDto;
 import net.javaguides.springboot_restfull_webservices.entity.User;
+import net.javaguides.springboot_restfull_webservices.exception.ResourceNotFoundException;
 import net.javaguides.springboot_restfull_webservices.mapper.UserMapper;
 import net.javaguides.springboot_restfull_webservices.respository.UserRepository;
 import net.javaguides.springboot_restfull_webservices.service.UserService;
@@ -37,7 +38,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserById(Long id) {
-        User user =  userRepository.findById(id).get();
+        User user =  userRepository.findById(id).orElseThrow(
+                ()-> new ResourceNotFoundException("User", "id", id)
+        );
 //        UserDto savedUserDto = UserMapper.mapToUserDto(user);
         UserDto savedUserDto = modelMapper.map(user, UserDto.class);
         return savedUserDto;
@@ -56,7 +59,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto updateUserDetails(UserDto userDto) {
-        User existingUser = userRepository.findById(userDto.getId()).get();
+        User existingUser = userRepository.findById(userDto.getId()).orElseThrow(
+                ()-> new ResourceNotFoundException("User", "id", userDto.getId())
+        );
         existingUser.setFirstName(userDto.getFirstName());
         existingUser.setLastName(userDto.getLastName());
         existingUser.setEmail(userDto.getEmail());
@@ -70,6 +75,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Long id) {
+        User user = userRepository.findById(id).orElseThrow(
+                ()-> new ResourceNotFoundException("User", "id", id)
+        );
         userRepository.deleteById(id);
     }
 }
