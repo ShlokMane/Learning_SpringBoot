@@ -74,7 +74,7 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public TodoDto completeTodo(Long id) {
+    public TodoDto updateTodoStatus(Long id) {
         Todo todo = todoRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Todo not found with id: " + id)
         );

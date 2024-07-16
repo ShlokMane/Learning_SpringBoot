@@ -1,6 +1,5 @@
 package net.javaguides.todo_management.controller;
 
-import jakarta.websocket.server.PathParam;
 import lombok.AllArgsConstructor;
 import net.javaguides.todo_management.dto.TodoDto;
 import net.javaguides.todo_management.service.TodoService;
@@ -50,9 +49,9 @@ public class TodoController {
         return ResponseEntity.ok("Todo deleted successfully");
     }
 
-    @PatchMapping("{id}/complete")
-    public ResponseEntity<TodoDto> completeTodo(@PathVariable("id") Long todoId) {
-        TodoDto updatedTodo = todoService.completeTodo(todoId);
+    @PatchMapping("{id}/update-todo-status")
+    public ResponseEntity<TodoDto> updateTodoStatus(@PathVariable("id") Long todoId) {
+        TodoDto updatedTodo = todoService.updateTodoStatus(todoId);
         return ResponseEntity.ok(updatedTodo);
     }
 }
