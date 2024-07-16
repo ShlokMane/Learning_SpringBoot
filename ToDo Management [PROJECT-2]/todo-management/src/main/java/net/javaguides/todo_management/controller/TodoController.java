@@ -1,14 +1,12 @@
 package net.javaguides.todo_management.controller;
 
+import jakarta.websocket.server.PathParam;
 import lombok.AllArgsConstructor;
 import net.javaguides.todo_management.dto.TodoDto;
 import net.javaguides.todo_management.service.TodoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/todos")
@@ -22,5 +20,12 @@ public class TodoController {
         TodoDto savedTodo = todoService.addTodo(todoDto);
 
         return new ResponseEntity<>(savedTodo, HttpStatus.CREATED);
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<TodoDto> getTodo(@PathVariable("id") Long toddId) {
+        TodoDto todoDto = todoService.getTodo(toddId);
+
+        return new ResponseEntity<>(todoDto, HttpStatus.OK);
     }
 }
