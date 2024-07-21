@@ -28,5 +28,6 @@ public class Order {
     private LocalDateTime dateCreated;
     @UpdateTimestamp
     private LocalDateTime lastUpdateTime;
+    private String status;
     private Long shoppingCartId;
 }
