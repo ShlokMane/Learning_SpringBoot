@@ -1,4 +1,4 @@
-package net.javaguides.springboot.controller;
+package net.javaguides.springboot.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
